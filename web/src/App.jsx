@@ -4,9 +4,8 @@ function App() {
   const [message, setMessage] = useState("");
 
   const fetchMessage = async () => {
-    const response = await fetch("http://localhost:5000");
-    const data = await response.text();
-    setMessage(data);
+    const response = await fetch("http://localhost:5000/ping");
+    console.log(response);
   };
 
   return (
