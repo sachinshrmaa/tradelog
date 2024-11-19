@@ -2,8 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "./src/utils/passport.js";
 
 import tradesRoutes from "./src/routes/trades.routes.js";
+import authRoutes from "./src/routes/auth.routes.js";
 
 // config
 dotenv.config();
@@ -31,9 +34,23 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Express Session Setup
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// Passport Initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get("/ping", (req, res) => res.json({ message: "pong" }));
 
 // routes
 app.use("/api/v1/trades", tradesRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

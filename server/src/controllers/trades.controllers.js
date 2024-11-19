@@ -1,17 +1,14 @@
-import { fetchTradesByUserId } from "../repository/trades.repository.js";
+import { getTradesByUserId } from "../repository/trades.repository.js";
 
-const getUserTrades = async (req, res) => {
-  // const userId = req.user.user_id;
-  const userId = req.body.userId;
-  if (!userId) {
-    return res.status(401).json({ message: "Unauthorized! Please login." });
-  }
-  try {
-    const trades = await fetchTradesByUserId(userId);
-    res.status(200).json({ message: "All trades", trades });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+export const getUserTrades = async (req, res) => {
+  if (req.isAuthenticated()) {
+    try {
+      const trades = await getTradesByUserId(req?.user?.user_id);
+      res.status(200).json({ status: 200, message: "All trades", trades });
+    } catch (error) {
+      res.status(500).json({ status: 500, message: error.message });
+    }
+  } else {
+    return res.status(401).json({ status: 401, message: "Unauthorized! Please login." });
   }
 };
-
-export { getUserTrades };
