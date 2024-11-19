@@ -3,6 +3,6 @@ import { getUserTrades } from "../controllers/trades.controllers.js";
 
 const router = Router();
 
-router.post("/", getUserTrades);
+router.get("/", getUserTrades);
 
 export default router;
